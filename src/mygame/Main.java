@@ -2,6 +2,8 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.ParticleMesh;
 import com.jme3.font.BitmapText;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
@@ -23,6 +25,7 @@ import mygame.environment.Sky;
 import mygame.environment.Floor;
 import mygame.gamegui.GameGUI;
 import mygame.shootables.Laser;
+import mygame.effects.ShipJetAnimation;
 
 public class Main extends SimpleApplication {
 
@@ -40,6 +43,8 @@ public class Main extends SimpleApplication {
     
     private BulletAppState bulletAppState;
     private ArrayList<Laser> laserbeams;
+    private ShipJetAnimation shipJetAni;
+    private ParticleEmitter shipJetParticleEmitter;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -84,6 +89,7 @@ public class Main extends SimpleApplication {
         enemy.setLocalTranslation(100, 5, 100);
         enemy.rotate(0, -135, 0);
         
+        //enemy with enemy class - non-functional yet
         enemy1 = new Enemy();
         enemy1.setXYZ(15,5,15);
         enemy1.setEnemyVectorFromXYZ();
@@ -94,6 +100,10 @@ public class Main extends SimpleApplication {
         player.setMaterial(mat1);
         player.scale(0.5f);
         player.setLocalTranslation(0,5,0);
+        
+        shipJetAni = new ShipJetAnimation();
+        shipJetParticleEmitter = shipJetAni.initShipJetAnimation(assetManager);
+        player.attachChild(shipJetParticleEmitter);
  
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.1f, -0.7f, -1.0f));
@@ -127,37 +137,27 @@ public class Main extends SimpleApplication {
                 laser.makeCannonBall(rootNode, bulletAppState, cam);
                 laserbeams.add(laser);
             }
+            if(ship_speed > 0){
+                shipJetParticleEmitter.setNumParticles((int) ship_speed);
+            }else{
+                shipJetParticleEmitter.setNumParticles(0);
+            }
         }
     };
     
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf){
             if(isRunning){
-                if(name.equals("AccUp")){ 
-                    ship_speed += value*speed;
-                }
-                if(name.equals("AccDown")){
-                    ship_speed -= value*speed;
-                }
-                if(name.equals("CamRight")){
-                    player.rotate(0, -value*speed, 0);}
-                if(name.equals("CamLeft")){
-                    player.rotate(0, +value*speed, 0);
-                }
-                if(name.equals("CamUp")){
-                    player.rotate(-value*speed, 0, 0);
-                }
-                if(name.equals("CamDown")){
-                    player.rotate(+value*speed, 0, 0);
-                }
-                if(name.equals("CamRollL")){
-                    player.rotate(0, 0, -value*speed);
-                }
-                if(name.equals("CamRollR")){
-                    player.rotate(0, 0, +value*speed);
-                }
-                if(name.equals("View1")){
-                    camDelta = new Vector3f(0, 0, -10);
+                if(name.equals("AccUp")){ ship_speed += value*speed; }
+                if(name.equals("AccDown")){ ship_speed -= value*speed; }
+                if(name.equals("CamRight")){ player.rotate(0, -value*speed, 0); }
+                if(name.equals("CamLeft")){ player.rotate(0, +value*speed, 0); }
+                if(name.equals("CamUp")){ player.rotate(-value*speed, 0, 0); }
+                if(name.equals("CamDown")){ player.rotate(+value*speed, 0, 0); }
+                if(name.equals("CamRollL")){ player.rotate(0, 0, -value*speed); }
+                if(name.equals("CamRollR")){ player.rotate(0, 0, +value*speed); }
+                if(name.equals("View1")){ 
+                    camDelta = new Vector3f(0, 0, -20);
                     camNode.setLocalTranslation(camDelta);
                     camNode.lookAt(player.getLocalTranslation(), Vector3f.UNIT_Y);
                     guiNode.detachAllChildren();
@@ -186,8 +186,6 @@ public class Main extends SimpleApplication {
         }
     };
     
-    
-    
     private void setCamera(){
         flyCam.setEnabled(false);
         camNode = new CameraNode("Camera Node", cam);
@@ -200,8 +198,10 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf){
         Vector3f v = player.getLocalRotation().getRotationColumn(2);
-        player.move(v.mult(tpf).mult(ship_speed));
-        
+        v = v.mult(tpf).mult(ship_speed);
+        player.move(v);
+        shipJetParticleEmitter.move(v);
+                
         Vector3f v_en = enemy.getLocalRotation().getRotationColumn(2);
         enemy.move(v_en.mult(tpf).mult(2f));
                 
