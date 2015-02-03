@@ -1,0 +1,12 @@
+Material My Material : Common/MatDefs/Light/Lighting.j3md {
+     MaterialParameters {
+		NormalMap: Textures/kl_jaeger_.png
+		Shininess: 8.0
+		UseMaterialColors : true
+        Ambient  : 0.0 0.0 0.0 1.0
+        Diffuse  : 1.0 1.0 1.0 1.0
+        Specular : 0.0 0.0 0.0 1.0
+     }
+    AdditionalRenderState {
+    }
+}

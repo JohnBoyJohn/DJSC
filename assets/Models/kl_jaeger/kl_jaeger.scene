@@ -1,0 +1,29 @@
+<scene formatVersion="1.0.1" export_time="1422615644.2222" previous_export_time="1422475043.8358" exported_by="JohnBoy" >
+  <nodes >
+    <node name="Empty" >
+      <position y="-0.004815" z="-0.005987" x="0.037081" />
+      <rotation qy="-0.003409" qw="0.999994" qz="-0.000000" qx="0.000000" />
+      <scale y="1.000000" z="1.000000" x="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <node name="Body" >
+        <position y="-0.005700" z="-0.005302" x="0.061988" />
+        <rotation qy="-0.608454" qw="0.397268" qz="-0.386069" qx="-0.568255" />
+        <scale y="1.000000" z="1.000000" x="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+        <entity friction_y="1.0" velocity_max="0.0" lock_trans_z="False" anisotropic_friction="False" lock_rot_z="False" actor="False" friction_z="1.0" velocity_min="0.0" physics_type="STATIC" friction_x="1.0" lock_trans_x="False" meshFile="Cone.001.mesh" lock_rot_x="False" name="Cone.001" lock_rot_y="False" damping_trans="0.03999999910593033" mass="1.0" ghost="False" damping_rot="0.10000000149011612" lock_trans_y="False" mass_radius="1.0" inertia_tensor="0.4000000059604645" />
+      </node>
+    </node>
+  </nodes>
+  <externals />
+  <environment >
+    <colourDiffuse g="0.05087608844041824" r="0.05087608844041824" b="0.05087608844041824" />
+    <colourBackground g="0.05087608844041824" r="0.05087608844041824" b="0.05087608844041824" />
+    <colourAmbient g="0.0" r="0.0" b="0.0" />
+  </environment>
+</scene>
